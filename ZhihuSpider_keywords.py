@@ -1,9 +1,9 @@
 #!/user/bin/python
-#coding=gbk
-#author£ºluoxiaoxu
+#-*-coding:utf-8-*-
+#authorï¼šluoxiaoxu
 #blog:xiaoxu.online
 #Filename: ZhihuAnswerDowload.py
-#Function: ÅÀÈ¡ÖªºõÎÊÌâÖĞº¬ÓĞÌØ¶¨¹Ø¼ü´ÊµÄ»Ø´ğ
+#Function: çˆ¬å–çŸ¥ä¹é—®é¢˜ä¸­å«æœ‰ç‰¹å®šå…³é”®è¯çš„å›ç­”
 
 from bs4 import BeautifulSoup
 import requests
@@ -15,22 +15,22 @@ import json
 
 def GetAnswer(*Question_ID):
     if len(Question_ID)==0:
-        Question_ID=input("ÇëÊäÈëÎÊÌâ±àºÅ£º")
-    keyword=input('ÇëÊäÈë¹Ø¼ü×Ö(Í¬Ê±º¬ÓĞÒÔ¿Õ¸ñ¼ä¸ô£¬»òº¬ÓĞÓÃ+¼ä¸ô)£º')  # ÀıÈç£¬±ØĞëº¬ÓĞº¼Öİ£¬Í¬Ê±º¬ÓĞÎäºº»òÄÏ¾©£¬ÊäÈë¡°º¼Öİ Îäºº+ÄÏ¾©¡±
-    keywords=keyword.split()                                            #ÏÂÔØÈ«²¿´ğ°¸£¬Ö±½Óenter
+        Question_ID=input("è¯·è¾“å…¥é—®é¢˜ç¼–å·ï¼š")
+    keyword=input('è¯·è¾“å…¥å…³é”®å­—(åŒæ—¶å«æœ‰ä»¥ç©ºæ ¼é—´éš”ï¼Œæˆ–å«æœ‰ç”¨+é—´éš”)ï¼š')  # ä¾‹å¦‚ï¼Œå¿…é¡»å«æœ‰æ­å·ï¼ŒåŒæ—¶å«æœ‰æ­¦æ±‰æˆ–å—äº¬ï¼Œè¾“å…¥â€œæ­å· æ­¦æ±‰+å—äº¬â€
+    keywords=keyword.split()                                            #ä¸‹è½½å…¨éƒ¨ç­”æ¡ˆï¼Œç›´æ¥enter
     if keyword=='':
-        keyword='ÎŞ'
+        keyword='æ— '
     headers = {'User-Agent':"Mozilla/5.0 (Windows NT 10.0; Win64; x64)"\
                " AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.3578.98 Safari/537.36"}
-    limit=10  #Ã¿´ÎÏÔÊ¾µÄ´ğ°¸¸öÊı
-    offset=0  #ÏÂÒ»´ÎÏÔÊ¾µÄ»Ø´ğÆ«ÒÆÁ¿
-    total_num=10  #´ğ°¸¸öÊı£¬³õÊ¼ÉèÎªlimit
-    browse_num=0  #ÒÑ¾­±éÀúµÄ»Ø´ğ¸öÊı
-    record_num=0  #º¬¹Ø¼ü×ÖµÄ»Ø´ğ¸öÊı
+    limit=10  #æ¯æ¬¡æ˜¾ç¤ºçš„ç­”æ¡ˆä¸ªæ•°
+    offset=0  #ä¸‹ä¸€æ¬¡æ˜¾ç¤ºçš„å›ç­”åç§»é‡
+    total_num=10  #ç­”æ¡ˆä¸ªæ•°ï¼Œåˆå§‹è®¾ä¸ºlimit
+    browse_num=0  #å·²ç»éå†çš„å›ç­”ä¸ªæ•°
+    record_num=0  #å«å…³é”®å­—çš„å›ç­”ä¸ªæ•°
     title=''
-    if not os.path.exists('ÖªºõÏÂÔØ/'):
-        os.makedirs('ÖªºõÏÂÔØ/')
-    print('\nÕıÔÚÅÀÈ¡¡­¡­\n')
+    if not os.path.exists('çŸ¥ä¹ä¸‹è½½/'):
+        os.makedirs('çŸ¥ä¹ä¸‹è½½/')
+    print('\næ­£åœ¨çˆ¬å–â€¦â€¦\n')
     while browse_num<total_num:
         url = "https://www.zhihu.com/api/v4/questions/{Question_ID}/answers?include=content&limit="\
               "{limit}&offset={offset}&platform=desktop&sort_by=default"\
@@ -39,48 +39,48 @@ def GetAnswer(*Question_ID):
         try:
             res=json.loads(res.content)
         except:
-            print('ÎÊÌâ±àºÅÊäÈë´íÎó£¡\n')
+            print('é—®é¢˜ç¼–å·è¾“å…¥é”™è¯¯ï¼\n')
             return None
         total_num=res['paging']['totals']
         cons=res['data']
 
         if cons is not None:
             if total_num<=0:
-                print('¸ÃÎÊÌâÔİÊ±ÎŞ´ğ°¸£¡')
+                print('è¯¥é—®é¢˜æš‚æ—¶æ— ç­”æ¡ˆï¼')
                 break
             if title=='':
                     title=cons[0]['question']['title']
-                    path_csv,path_txt=CreativeFile(title,keyword)  #´´½¨csvºÍtxtÎÄ¼ş£¬csvÎÄ¼şÎª±£´æËùÓĞº¬ÓĞ¹Ø¼ü´Ê»Ø´ğµÄÁ´½ÓÁĞ±í
+                    path_csv,path_txt=CreativeFile(title,keyword)  #åˆ›å»ºcsvå’Œtxtæ–‡ä»¶ï¼Œcsvæ–‡ä»¶ä¸ºä¿å­˜æ‰€æœ‰å«æœ‰å…³é”®è¯å›ç­”çš„é“¾æ¥åˆ—è¡¨
             for con in cons:
                 browse_num+=1
                 Re=re.compile(r'<[^>]+>',re.S)
-                answer_detail=Re.sub('',con['content'])   #»ñÈ¡¾ßÌå»Ø´ğÄÚÈİ
+                answer_detail=Re.sub('',con['content'])   #è·å–å…·ä½“å›ç­”å†…å®¹
                 flag=True
                 if len(keywords)>0:
-                   flag=HasKeywords(answer_detail,keyword)  #²éÑ¯ÊÇ·ñÓĞ¹Ø¼ü´Ê
+                   flag=HasKeywords(answer_detail,keyword)  #æŸ¥è¯¢æ˜¯å¦æœ‰å…³é”®è¯
                 if flag:
                     record_num+=1
                     author_name=con['author']['name']
-                    author_url='https://www.zhihu.com/people/'+con['author']['url_token'] if not author_name=='ÄäÃûÓÃ»§' else ' '
+                    author_url='https://www.zhihu.com/people/'+con['author']['url_token'] if not author_name=='åŒ¿åç”¨æˆ·' else ' '
                     answer_url='https://www.zhihu.com/question/'+str(Question_ID)+'/answer/'+str(con['id'])
                     Save2File_csv(path_csv,[str(record_num)+'.',author_name,answer_url,author_url])
-                    answer_txt=[str(record_num)+'.',author_name+'   Ö÷Ò³:'+author_url]
-                    answer_txt.append('\n\nÁ´½Ó:'+answer_url+'\n')
+                    answer_txt=[str(record_num)+'.',author_name+'   ä¸»é¡µ:'+author_url]
+                    answer_txt.append('\n\né“¾æ¥:'+answer_url+'\n')
                     answer_txt.append('\n'+answer_detail+\
                         '\n-------------------------------------------------------------------------------\n')
                     Save2File_txt(path_txt,answer_txt)
-                    print('ÒÑ±£´æµÚ%d¸ö»Ø´ğ\n'%record_num)
+                    print('å·²ä¿å­˜ç¬¬%dä¸ªå›ç­”\n'%record_num)
             offset+=len(cons)
-            if len(cons)<limit:  #ÒÑÅÀÈ¡µ½×îºóÒ»Ò³
+            if len(cons)<limit:  #å·²çˆ¬å–åˆ°æœ€åä¸€é¡µ
                 break
     if len(keywords)==0:
-        print('ÅÀÈ¡Íê³É£¬ÒÑ±£´æÈ«²¿%d¸ö»Ø´ğ£¡\n'%record_num)
+        print('çˆ¬å–å®Œæˆï¼Œå·²ä¿å­˜å…¨éƒ¨%dä¸ªå›ç­”ï¼\n'%record_num)
     elif record_num>0:
-        print('ÅÀÈ¡Íê³É£¬ÒÑ±£´æ%d¸öÓë¹Ø¼ü´ÊÓĞ¹ØµÄ»Ø´ğ£¡\n'%record_num)
+        print('çˆ¬å–å®Œæˆï¼Œå·²ä¿å­˜%dä¸ªä¸å…³é”®è¯æœ‰å…³çš„å›ç­”ï¼\n'%record_num)
     else:
         os.remove(path_csv)
         os.remove(path_txt)
-        print('Î´ÕÒµ½Óë¹Ø¼ü´ÊÓĞ¹ØµÄ´ğ°¸\n')
+        print('æœªæ‰¾åˆ°ä¸å…³é”®è¯æœ‰å…³çš„ç­”æ¡ˆ\n')
                 
 
 
@@ -96,7 +96,7 @@ def Save2File_txt(path,contents):
         f.writelines(content)
     f.writelines('\n')
 
-def HasKeywords(answer_detail,keyword):   #ÅĞ¶ÏÊÇ·ñº¬ÓĞËùÓĞ¹Ø¼ü´Ê
+def HasKeywords(answer_detail,keyword):   #åˆ¤æ–­æ˜¯å¦å«æœ‰æ‰€æœ‰å…³é”®è¯
     flag=True
     for key in keyword.split():    
         flag2=False
@@ -110,9 +110,9 @@ def HasKeywords(answer_detail,keyword):   #ÅĞ¶ÏÊÇ·ñº¬ÓĞËùÓĞ¹Ø¼ü´Ê
     return True
 
 def CreativeFile(title,keyword):
-    path_csv='ÖªºõÏÂÔØ/'+title+'.csv'
-    path_txt='ÖªºõÏÂÔØ/'+title+'.txt'
-    if os.path.exists(path_csv):   #ÈôÎÄ¼ş´æÔÚ£¬Çå¿Õ
+    path_csv='çŸ¥ä¹ä¸‹è½½/'+title+'.csv'
+    path_txt='çŸ¥ä¹ä¸‹è½½/'+title+'.txt'
+    if os.path.exists(path_csv):   #è‹¥æ–‡ä»¶å­˜åœ¨ï¼Œæ¸…ç©º
         f=open(path_csv,'w')
         f.seek(0)
         f.truncate()
@@ -123,9 +123,9 @@ def CreativeFile(title,keyword):
         f.truncate()
         f.close()
     Save2File_csv(path_csv,[title])
-    Save2File_csv(path_csv,['¹Ø¼ü×Ö£º'+keyword])
-    Save2File_csv(path_csv,['ĞòºÅ','×÷ÕßêÇ³Æ','»Ø´ğÁ´½Ó','Ö÷Ò³Á´½Ó'])
-    Save2File_txt(path_txt,[title,'¹Ø¼ü×Ö£º'+keyword+'\n'])
+    Save2File_csv(path_csv,['å…³é”®å­—ï¼š'+keyword])
+    Save2File_csv(path_csv,['åºå·','ä½œè€…æ˜µç§°','å›ç­”é“¾æ¥','ä¸»é¡µé“¾æ¥'])
+    Save2File_txt(path_txt,[title,'å…³é”®å­—ï¼š'+keyword+'\n'])
     return path_csv,path_txt
 
 
